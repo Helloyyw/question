@@ -79,10 +79,9 @@ public class UserController {
      * @param userId
      * @return
      */
-    @PostMapping("/delete")
+    @RequestMapping("/delete")
     public JsonData updateUserInfo(Integer userId) {
         log.info("用户id:{}",userId);
-
         return  userService.deleUser(userId);
     }
     /**
@@ -107,5 +106,10 @@ public class UserController {
         return JsonData.success(allUserList);
     }
 
-
+    @PostMapping("/register")
+    public JsonData registerUserInfo(User user) {
+        log.info("user:{}",user);
+        JsonData jsonData = userService.addUser(user);
+        return JsonData.success("注册成功");
+    }
 }

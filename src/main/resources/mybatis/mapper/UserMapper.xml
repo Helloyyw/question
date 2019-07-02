@@ -123,4 +123,15 @@
   <select id="findAllUserList" resultType="com.question.entity.User"  >
     select * from user
   </select>
+
+  <update id="updateById" parameterType="integer">
+    update user
+    set score = score-5
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByIdAdd" >
+    update user
+    set score = score+#{scroe}
+    where id = #{userId,jdbcType=INTEGER}
+  </update>
 </mapper>

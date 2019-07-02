@@ -1,5 +1,6 @@
 package com.question.dto;
 
+
 import com.question.entity.Bank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class QuestionBankDto {
     private String scroe;
     //题库集合一个问卷下面有很多题的集合
     List<Bank> bankList;
+
 }

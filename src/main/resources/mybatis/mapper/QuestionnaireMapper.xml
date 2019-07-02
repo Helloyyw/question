@@ -79,4 +79,20 @@
       scroe = #{scroe,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="findAll" resultType="com.question.entity.Questionnaire">
+    select
+   *
+    from questionnaire
+
+  </select>
+
+  <select id="finfByUserId" resultType="com.question.entity.Questionnaire" parameterType="Integer">
+    select
+    <include refid="Base_Column_List" />
+    from questionnaire
+    WHERE
+    user_id = #{userId}
+  </select>
+
 </mapper>

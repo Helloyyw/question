@@ -23,4 +23,8 @@ public interface UserMapper {
     User check(@Param("username") String username,@Param("password") String password);
 
     List<User> findAllUserList();
+
+    int updateById(int userId);
+
+    int updateByIdAdd(Integer userId, Integer scroe);
 }

@@ -1,7 +1,9 @@
 package com.question.dao;
 
+import com.question.dto.BankDto;
 import com.question.entity.Bank;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +21,7 @@ public interface BankMapper {
 
     int updateByPrimaryKey(Bank record);
 
-    int insertList(List<Bank> bankList);
+    int insertList(@Param("bankList") List<Bank> bankList);
+
+    List<Bank> findBankById(Integer quId);
 }

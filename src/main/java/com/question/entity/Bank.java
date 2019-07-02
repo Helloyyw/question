@@ -1,8 +1,14 @@
 package com.question.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Bank {
     private Integer id;
 

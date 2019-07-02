@@ -91,19 +91,25 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-
   <insert id="insertList" parameterType="java.util.List" useGeneratedKeys="false">
     insert into bank
     ( id,title,answer,qu_id,selectItem)
     values
-    <foreach collection="list" item="item" index="index" separator=",">
+    <foreach collection="bankList" item="item" index="index" separator=",">
       (
       null,
       #{item.title},
       #{item.answer},
       #{item.quId},
-      #{item.selectItem}
+      #{item.selectitem}
       )
     </foreach>
   </insert>
+
+  <select id="findBankById" resultType="com.question.entity.Bank" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from bank
+    where qu_id = #{quId,jdbcType=INTEGER}
+  </select>
 </mapper>

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.question.dao.UserBankMapper" >
-  <resultMap id="BaseResultMap" type="com.question.entity.UserBank" >
+<mapper namespace="com.question.dao.UserQustionMapper" >
+  <resultMap id="BaseResultMap" type="com.question.entity.UserQustion" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="bank_id" property="bankId" jdbcType="INTEGER" />
     <result column="user_answer" property="userAnswer" jdbcType="VARCHAR" />
+    <result column="qu_id" property="quId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_id, bank_id, user_answer
+    id, user_id, user_answer, qu_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from user_bank
+    from user_qustion
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from user_bank
+    delete from user_qustion
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.question.entity.UserBank" >
-    insert into user_bank (id, user_id, bank_id, 
-      user_answer)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{bankId,jdbcType=INTEGER}, 
-      #{userAnswer,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.question.entity.UserQustion" >
+    insert into user_qustion (id, user_id, user_answer, 
+      qu_id)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{userAnswer,jdbcType=VARCHAR}, 
+      #{quId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.question.entity.UserBank" >
-    insert into user_bank
+  <insert id="insertSelective" parameterType="com.question.entity.UserQustion" >
+    insert into user_qustion
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -35,11 +35,11 @@
       <if test="userId != null" >
         user_id,
       </if>
-      <if test="bankId != null" >
-        bank_id,
-      </if>
       <if test="userAnswer != null" >
         user_answer,
+      </if>
+      <if test="quId != null" >
+        qu_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -49,55 +49,40 @@
       <if test="userId != null" >
         #{userId,jdbcType=INTEGER},
       </if>
-      <if test="bankId != null" >
-        #{bankId,jdbcType=INTEGER},
-      </if>
       <if test="userAnswer != null" >
         #{userAnswer,jdbcType=VARCHAR},
       </if>
+      <if test="quId != null" >
+        #{quId,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.question.entity.UserBank" >
-    update user_bank
+  <update id="updateByPrimaryKeySelective" parameterType="com.question.entity.UserQustion" >
+    update user_qustion
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="bankId != null" >
-        bank_id = #{bankId,jdbcType=INTEGER},
-      </if>
       <if test="userAnswer != null" >
         user_answer = #{userAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="quId != null" >
+        qu_id = #{quId,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.question.entity.UserBank" >
-    update user_bank
+  <update id="updateByPrimaryKey" parameterType="com.question.entity.UserQustion" >
+    update user_qustion
     set user_id = #{userId,jdbcType=INTEGER},
-      bank_id = #{bankId,jdbcType=INTEGER},
-      user_answer = #{userAnswer,jdbcType=VARCHAR}
+      user_answer = #{userAnswer,jdbcType=VARCHAR},
+      qu_id = #{quId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <insert id="insertList" parameterType="java.util.List" useGeneratedKeys="false">
-    insert into bank
-    ( id,title,answer,qu_id,selectItem)
-    values
-    <foreach collection="bankList" item="item" index="index" separator=",">
-      (
-      null,
-      #{item.title},
-      #{item.answer},
-      #{item.quId},
-      #{item.selectitem}
-      )
-    </foreach>
-  </insert>
-
-  <select id="findByQuId" resultType="com.question.entity.UserBank" parameterType="Integer">
-    select *
-    from user_bank
+  <select id="finfByUserId"  resultType="integer" parameterType="Integer">
+    select
+   qu_id
+    from user_qustion
     WHERE
     user_id = #{userId}
   </select>
