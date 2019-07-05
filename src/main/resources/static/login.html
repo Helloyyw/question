@@ -16,42 +16,115 @@
 <body class="login-bg">
     
     <div class="login">
-        <div class="message">WeAdmin 1.0-管理登录</div>
+        <div class="message">问卷系统-管理登录</div>
         <div id="darkbannerwrap"></div>
         
-        <form method="post" class="layui-form" >
-            <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
+        <form method="post" class="layui-form" onsubmit="return userLogin()">
+            <input name="username" id="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
             <hr class="hr15">
-            <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
+            <input name="password" id="pasword" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
             <hr class="hr15">
             <input class="loginin" value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
             <hr class="hr20" >
-            <div>
-            	前端静态展示，请随意输入，即可登录。
-            </div>
+            <a href='javascript:;' id="register" onclick="WeAdminShow('添加用户','./add.html',600,400)">
+                <i class="layui-icon layui-icon-add-circle-fine"></i>注册
+            </a>
+            <!--<div>-->
+            	<!--前端静态展示，请随意输入，即可登录。-->
+            <!--</div>-->
         </form>
     </div>
 
     <script type="text/javascript">
-        
-        	layui.extend({
-				admin: '{/}./static/js/admin'
-			});
-            layui.use(['form','admin'], function(){
-              var form = layui.form
-              	,admin = layui.admin;
-              // layer.msg('玩命卖萌中', function(){
-              //   //关闭后的操作
-              //   });
-              //监听提交
-              form.on('submit(login)', function(data){
-                // alert(888)
-                layer.msg(JSON.stringify(data.field),function(){
-                    location.href='./index.html'
+
+        layui.extend({
+            admin: '{/}./static/js/admin'
+        });
+
+        function WeAdminShow(title, url, w, h) {
+
+            layui.use(['form','admin','jquery','layer'], function() {
+                var form = layui.form
+                    , admin = layui.admin
+                    ,layer = layui.layer
+                    , $ = layui.jquery;
+
+                if(title == null || title == '') {
+                    title = false;
+                };
+                if(url == null || url == '') {
+                    url = "404.html";
+                };
+                if(w == null || w == '') {
+                    w = ($(window).width() * 0.9);
+                };
+                if(h == null || h == '') {
+                    h = ($(window).height() - 50);
+                };
+                layer.open({
+                    type: 2,
+                    area: [w + 'px', h + 'px'],
+                    fix: false, //不固定
+                    maxmin: true,
+                    shadeClose: true,
+                    shade: 0.4,
+                    title: title,
+                    content: url
                 });
-                return false;
-              });
-            });   
+
+            });
+        }
+
+
+
+
+        function userLogin(){
+
+            layui.use(['form','admin','jquery','layer'], function() {
+                var form = layui.form
+                    , admin = layui.admin
+                    ,layer = layui.layer
+                    , $ = layui.jquery;
+                // layer.msg('玩命卖萌中', function(){
+                //   //关闭后的操作
+                //   });
+
+                // $(function () {
+                //     $("#register").click(function () {
+                //
+                //     });
+                // });
+
+                form.on('submit(login)', function (data) {
+                    var userInfo = data.field;
+                   // alert(userInfo.username)
+                    $.getJSON("./json/app.json", function (result) {
+                        $.ajax({
+                            type: 'POST',
+                            url: result.server + "/user/dologin",
+                            data: {username:userInfo.username,password:userInfo.password},
+                            dataType: 'json',
+                            success: function (result) {
+                                // console.log(result)
+                                if(result.ret){
+                                    sessionStorage.setItem("userInfo",JSON.stringify(result.data));
+                                    console.log(result.data)
+                                    location.href='./index.html';
+                                }else{
+                                    layer.msg(result.msg);
+                                }
+                            },
+                            error: function (error) {
+                                alert("网络异常");
+                            }
+                        });
+                    });
+                    return false;
+                });
+            });
+            return false;
+        }
+
     </script>  
     <!-- 底部结束 -->
 </body>

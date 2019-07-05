@@ -55,11 +55,36 @@ layui.use(['laydate', 'jquery', 'admin'], function() {
 	window.member_del = function (obj, id) {
 		layer.confirm('确认要删除吗？', function(index) {
 			//发异步删除数据
-			$(obj).parents("tr").remove();
-			layer.msg('已删除!', {
-				icon: 1,
-				time: 1000
+			var id = $(obj).attr("id");
+
+			$.getJSON("../../json/app.json", function (result) {
+				$.ajax({
+					type: 'GET',
+					url: result.server + "/user/delete",
+					data: {userId : id},
+					dataType: 'json',
+					success: function (result) {
+						console.log(result)
+						if(result.ret){
+
+							//刷新父页面
+							parent.location.reload();
+
+							// console.log(result.data)
+							layer.msg('已删除!', {
+								icon: 1,
+								time: 1000
+							});
+						}else{
+							layer.msg(result.msg);
+						}
+					},
+					error: function (error) {
+						// alert(error);
+					}
+				});
 			});
+
 		});
 	}
 

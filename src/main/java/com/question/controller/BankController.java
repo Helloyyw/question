@@ -20,5 +20,4 @@ public class BankController {
     public JsonData findByQuId(Integer quId){
         return bankService.findByQuId(quId);
     }
-
 }

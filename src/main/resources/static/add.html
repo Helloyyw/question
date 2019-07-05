@@ -46,15 +46,15 @@
 						<input type="text" id="L_phone" name="avg" autocomplete="" class="layui-input">
 					</div>
 				</div>
-				<div class="layui-form-item">
-					<label for="L_email" class="layui-form-label">
-		                <span class="we-red">*</span>积分
-		            </label>
-					<div class="layui-input-inline">
-						<input type="text" id="L_email" name="score" autocomplete="off" class="layui-input">
-					</div>
+				<!--<div class="layui-form-item">-->
+					<!--<label for="L_email" class="layui-form-label">-->
+		                <!--<span class="we-red">*</span>积分-->
+		            <!--</label>-->
+					<!--<div class="layui-input-inline">-->
+						<!--<input type="text" id="L_email" name="score" autocomplete="off" class="layui-input">-->
+					<!--</div>-->
 
-				</div>
+				<!--</div>-->
 				<div class="layui-form-item">
 					<label for="L_pass" class="layui-form-label">
                   <span class="we-red">*</span>密码
@@ -108,29 +108,17 @@
 						}
 					}
 				});
-				// //失去焦点时判断值为空不验证，一旦填写必须验证
-				// $('input[name="email"]').blur(function(){
-				// 	//这里是失去焦点时的事件
-				// 	if($('input[name="email"]').val()){
-				// 		$('input[name="email"]').attr('lay-verify','email');
-				// 	}else{
-				// 		$('input[name="email"]').removeAttr('lay-verify');
-				// 	}
-				// });
 
 				//监听提交
 				form.on('submit(add)', function(data) {
 					//console.log(data.field);
 					var userInfo = data.field;
-					//console.log(f.username);
-					//console.log(f.sex);				
-					//var sex = $('input:radio[name="sex"]:checked').val();
 
 					$.getJSON("../../json/app.json", function (result) {
 						$.ajax({
 							type: 'POST',
 							url: result.server + "/user/add",
-							data: {name:userInfo.username,sex:userInfo.sex,avg:userInfo.avg,score:userInfo.score,password:userInfo.password},
+							data: {name:userInfo.username,sex:userInfo.sex,avg:userInfo.avg,password:userInfo.password},
 							dataType: 'json',
 							success: function (result) {
 								console.log(result)

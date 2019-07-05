@@ -7,7 +7,7 @@
 -->  
   <head>
     <meta charset="UTF-8">
-    <title>添加分类-WeAdmin Frame型后台管理系统-WeAdmin 1.0</title>
+    <title>添加问卷</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -24,50 +24,93 @@
     <div class="weadmin-body">
         <form class="layui-form">
           <div class="layui-form-item">
-              <label for="categoryWeight" class="layui-form-label">栏目权重</label>
+              <label class="layui-form-label">问卷名称</label>
               <div class="layui-input-inline">
-                  <input type="text" id="weight" name="weight" autocomplete="off" class="layui-input">
+                  <input type="text" id="quname" name="quname" autocomplete="off" class="layui-input">
               </div>
           </div>
           <div class="layui-form-item">
-              <label for="categoryName" class="layui-form-label">栏目名称</label>
+              <label class="layui-form-label">积分值</label>
               <div class="layui-input-inline">
-                  <input type="text" id="categoryName" name="categoryName" autocomplete="off" class="layui-input">
+                  <input type="text" id="scroe" name="scroe" autocomplete="off" class="layui-input">
               </div>
           </div>
 
-
-          <div class="layui-form-item">
-              <label for="username" class="layui-form-label">
-                  <span class="we-red">*</span>父级栏目
-              </label>
-              <div class="layui-input-inline">
-                  <select name="contrller">
-                    <option>支付方式</option>
-                    <option>支付宝</option>
-                    <option>微信</option>
-                    <option>货到付款</option>
-                  </select>
-              </div>
-          </div>
       </form>
+        <div id="qus"></div>
+        <div class="layui-form-item">
+            <button class="layui-btn" id="addqu">添加题目</button>
+            <button class="layui-btn" lay-filter="add" lay-submit="">确定</button>
+        </div>
     </div>
 	<script src="../../lib/layui/layui.js" charset="utf-8"></script>
     <script>
-        layui.use(['form','layer'], function(){
+        layui.use(['form','layer','jquery'], function(){
           	var form = layui.form,
+                $ = layui.jquery,
           		layer = layui.layer;
+          	
+            $(function () {
+                var count = 1;
+                //动态添加题目
+                $("#addqu").click(function () {
+                    $("#qus").append("<div class='layui-form-item'>" +
+                        "<label class='layui-form-label'>问题"+count+"</label>" +
+                            "<div class='layui-input-inline' style='display: flex;flex-direction: row;'>" +
+                                "<input style='width:220px;margin-right: 20px;' type='text' id='bank"+count+"' name='bank"+count+"' autocomplete='off' class='layui-input'>" +
+                                "<input style='width:220px;margin-right: 20px;' type='text' placeholder='答案(格式：A:123,B:1)' id='answer"+count+"' name='answer"+count+"' autocomplete='off' class='layui-input'>" +
+                                "<input style='width:220px;;margin-right: 20px;' type='text' placeholder='正确答案(格式：A)' id='corrent"+count+"' name='corrent"+count+"' autocomplete='off' class='layui-input'>" +
+                             "</div>"+
+                        "</div>")
+                    count = count + 1;
+                });
+            });
 
 	        //监听提交
 	        form.on('submit(add)', function(data){
-	            console.log(data);
-	            //发异步，把数据提交给php
-	            layer.alert("增加成功", {icon: 6},function () {
-	                // 获得frame索引
-	                var index = parent.layer.getFrameIndex(window.name);
-	                //关闭当前frame
-	                parent.layer.close(index);
-	            });
+
+                var bankSize = $("#qus").children().length;
+                var banks = [];
+                for(var i = 1; i <= bankSize;i++){
+                    if($("#bank"+i).val() != "" || $("#bank"+i).val() != null){
+                        banks.push({title:$("#bank"+i).val(),answer:$("#corrent"+i).val(),selectitem:$("#answer"+i).val()});
+                    }
+                }
+
+                var qu = data.field;
+                var userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+                $.getJSON("../../json/app.json", function (result) {
+                    $.ajax({
+                        type: 'POST',
+                        url: result.server + "/question/add",
+                        data: JSON.stringify({userId:userInfo.id,name:$("#quname").val(),scroe:$("#scroe").val(),bankList:banks}),
+                        dataType: 'json',
+                        contentType:'application/json; charset=utf-8',
+                        success: function (result) {
+                            console.log(result)
+                            if(result.ret){
+
+                                //发异步，把数据提交给php
+                                layer.alert("增加成功", {
+                                    icon: 6
+                                }, function() {
+                                    //刷新父页面
+                                    parent.location.reload();
+                                    // 获得frame索引
+                                    var index = parent.layer.getFrameIndex(window.name);
+
+                                    // var _len = parent.$('#memberList tr').length;
+                                    // alert(_len);
+
+                                    //关闭当前frame
+                                    parent.layer.close(index);
+                                });
+                            }else{
+                                layer.msg(result.msg);
+                            }
+                        }
+                    });
+                })
 	            return false;
 	        }); 
         });

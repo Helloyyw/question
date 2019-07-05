@@ -1,8 +1,6 @@
 package com.question.controller;
 
 import com.question.dto.QuestionBankDto;
-import com.question.entity.Questionnaire;
-import com.question.entity.User;
 import com.question.entity.UserQustion;
 import com.question.service.QuestionService;
 import com.question.util.JsonData;
@@ -76,4 +74,5 @@ public class UserQuestionController {
             log.info("UserQustion:{}",userQustion.getQuId());
         return questionService.saveAswer(userQustion);
     }
+
 }

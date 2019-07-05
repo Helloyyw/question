@@ -1,0 +1,73 @@
+<!--此页面已废弃，仅供参考-->
+<!DOCTYPE html>
+<html>
+<!--frame传值后再添加新数据的实现方法尝试页面备份-->
+	<head>
+		<meta charset="UTF-8">
+		<title>会员列表-WeAdmin 1.0</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/weadmin.css">
+		<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/admin.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body>
+		<div class="weadmin-body">
+			<div style="display: flex;flex-direction: row;justify-content: center;font-size: 20px;font-weight: 800;">
+				问卷名：<div id="quname"></div>
+			</div><br>
+			<div id="dataInfo" style="display: flex;flex-direction: column;justify-content: center;font-size: 18px;"></div><br><br>
+			<div id="answers" style="font-size: 18px;"></div>
+		</div>
+		<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+		<script src="list.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			layui.use(['form','jquery','layer'], function() {
+				var admin = layui.admin
+						, layer = layui.layer
+						, $ = layui.jquery;
+				
+				$(function () {
+					var quBank = JSON.parse(sessionStorage.getItem("quBank"));
+					var dataInfo = "";
+					var answer = [];
+					for (var i = 0; i < quBank.length;i++){
+						answer.push(quBank[i].answer);
+						var item = quBank[i].selectitem.split(",");
+						var itemKeys = "";
+						for(var key = 0; key < item.length;key++){
+							itemKeys = itemKeys + "&nbsp;"+item[key];
+						}
+
+						dataInfo = dataInfo + "<div style='margin-bottom: 12px'>" +
+								"<div style='margin-bottom: 5px'>"+(i+1)+".&nbsp;"+quBank[i].title+"</div>" +
+								"<div>"+itemKeys+"</div>"+
+								"</div>"
+					}
+
+					var answers = "";
+					for(var j = 0; j < answer.length;j++){
+						answers = answers +"&nbsp;&nbsp;"+ answer[j]
+					}
+
+
+					$("#dataInfo").html(dataInfo);
+
+					$("#answers").html("你的答案:"+answers)
+
+				});
+			});
+		</script>
+	</body>
+
+</html>

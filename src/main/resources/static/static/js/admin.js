@@ -326,7 +326,7 @@ layui.define(['jquery', 'form', 'layer', 'element'], function(exports) {
 		});
 	}
 	/*弹出层+传递ID参数*/
-	window.WeAdminEdit = function(title, url, id, w, h) {
+	window.WeAdminEdit = function(title, url, obj, w, h) {
 		if(title == null || title == '') {
 			title = false;
 		};
@@ -350,9 +350,10 @@ layui.define(['jquery', 'form', 'layer', 'element'], function(exports) {
 			content: url,
 			success: function(layero, index) {
 				//向iframe页的id=house的元素传值  // 参考 https://yq.aliyun.com/ziliao/133150
+				// index = $(".userId").attr("id");
 				var body = layer.getChildFrame('body', index);
-				body.contents().find("#dataId").val(id);
-				console.log(id);
+				body.contents().find("#dataId").val($(obj).attr("id"));
+				console.log($(obj).attr("id"));
 			},
 			error: function(layero, index) {
 				alert("aaa");

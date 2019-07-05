@@ -1,6 +1,8 @@
 package com.question.controller;
 
+import com.question.entity.TempScore;
 import com.question.entity.User;
+import com.question.service.TempScoreService;
 import com.question.service.UserService;
 import com.question.util.JsonData;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,8 @@ public class UserController {
 
     @Resource
     public UserService userService;
-
+    @Resource
+    public TempScoreService tempScoreService;
     /**
      * 用户登录验证
      *
@@ -111,5 +114,43 @@ public class UserController {
         log.info("user:{}",user);
         JsonData jsonData = userService.addUser(user);
         return JsonData.success("注册成功");
+    }
+
+    //向管理员借积分功能
+    @PostMapping("/borrow")
+    public JsonData borrowScore(TempScore tempScore) {
+        log.info("user:{}",tempScore);
+        JsonData jsonData = tempScoreService.addTempScore(tempScore);
+        return jsonData;
+    }
+    //管理员获取所有状态没有处理的借积分请求
+    @GetMapping("/getNoDeal")
+    public JsonData getNoDeal() {
+        JsonData jsonData = tempScoreService.findByStatus();
+        return jsonData;
+    }
+    //管理员处理用户的借积分请求
+    @GetMapping("/addScore")
+    public JsonData addScore(Integer tempId) {
+        JsonData jsonData = tempScoreService.addScore(tempId);
+        return jsonData;
+    }
+    //管理员拒绝该用户请求积分的请求
+    @GetMapping("/refeuse")
+    public JsonData refeuse(Integer  tempId) {
+        JsonData jsonData = tempScoreService.refeuse(tempId);
+        return jsonData;
+    }
+    //用户应该归还积分列表
+    @GetMapping("/raback")
+    public JsonData raback(Integer  userId) {
+        JsonData jsonData = tempScoreService.raback(userId);
+        return jsonData;
+    }
+    //用户点击归还积分
+    @GetMapping("/raback1")
+    public JsonData raback1(Integer  tempId) {
+        JsonData jsonData = tempScoreService.updateBytempId(tempId);
+        return jsonData;
     }
 }

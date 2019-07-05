@@ -1,15 +1,13 @@
 package com.question.service.impl;
 
 
-import com.question.dao.QuestionnaireMapper;
-import com.question.dao.UserBankMapper;
-import com.question.dao.UserMapper;
-import com.question.dao.UserQustionMapper;
+import com.question.dao.*;
 import com.question.dto.BankDto;
 import com.question.dto.QuestionBankDto;
 import com.question.entity.*;
 import com.question.service.BankService;
 import com.question.service.QuestionService;
+import com.question.service.TempScoreService;
 import com.question.util.JsonData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +30,8 @@ public class QuestionServiceImpl implements QuestionService {
     public UserMapper userMapper;
     @Resource
     public UserBankMapper userBankMapper;
+    @Resource
+    public TempScoreMapper  tempScoreMapper;
     //添加题库功能
     @Override
     public JsonData addQuestion(QuestionBankDto questionBankDto) {
@@ -43,7 +43,8 @@ public class QuestionServiceImpl implements QuestionService {
         //用户在进行 发问卷的功能的时候必须判断用户的积分情况
         User user = userMapper.selectByPrimaryKey(questionBankDto.getUserId());
         if(user.getScore() < 5){
-            return   JsonData.fail("你的积分不足，还不能发表问卷");
+
+            return   JsonData.fail("你的积分不足5分，还不能发表问卷");
         }
     //插入一条问卷
         int i = questionnaireMapper.insertSelective(questionnaire);
